@@ -63,16 +63,36 @@ function Card:draw(...)
 end
 
 local function queue_reroll()
-    if not AutoShop.active or AutoShop.found or AutoShop.rerolls >= AutoShop.max_rerolls or G.GAME.dollars <= G.GAME.current_round.reroll_cost then
+    if not AutoShop.active or AutoShop.found or AutoShop.rerolls >= AutoShop.max_rerolls then
         return
     end
+	
+	if Talisman and type(G.GAME.dollars) == "table" then
+		if to_big(G.GAME.dollars) <= to_big(G.GAME.current_round.reroll_cost) then
+			return
+		end
+	else
+		if G.GAME.dollars <= G.GAME.current_round.reroll_cost then
+			return
+		end
+	end
 
     G.E_MANAGER:add_event(Event({
         trigger = "immediate",
         func = function()
-            if not AutoShop.active or AutoShop.found or AutoShop.rerolls >= AutoShop.max_rerolls or G.GAME.dollars <= G.GAME.current_round.reroll_cost then
+            if not AutoShop.active or AutoShop.found or AutoShop.rerolls >= AutoShop.max_rerolls then
                 return true
             end
+
+			if Talisman and type(G.GAME.dollars) == "table" then
+				if to_big(G.GAME.dollars) <= to_big(G.GAME.current_round.reroll_cost) then
+					return
+				end
+			else
+				if G.GAME.dollars <= G.GAME.current_round.reroll_cost then
+					return
+				end
+			end
 
             AutoShop.rerolls = AutoShop.rerolls + 1
 
