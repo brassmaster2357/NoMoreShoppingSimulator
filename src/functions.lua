@@ -6,7 +6,9 @@ local AutoShop = {
     rerolls = 0,
     max_rerolls = 1000,
     selection_mode = false,
-    start_rolls = false
+    start_rolls = false,
+	combo_mode = false,
+	keep_selected = false
 }
 
 local function start_shop_search()
@@ -42,7 +44,8 @@ create_card = function(...)
         })
         AutoShop.found = true
         AutoShop.active = false
-        AutoShop.targets[key] = false
+		AutoShop.start_rolls = AutoShop.combo_mode
+        AutoShop.targets[key] = AutoShop.keep_selected
     end
 
     return card
@@ -179,8 +182,6 @@ SMODS.Keybind {
     end,
 }
 
-
-
 SMODS.Keybind {
     key = 'selectTarget',
     key_pressed = 'space',
@@ -204,5 +205,63 @@ SMODS.Keybind {
 		else
 			AutoShop.target_count = AutoShop.target_count - 1
 		end
+    end,
+}
+
+SMODS.Keybind {
+    key = 'toggleComboMode',
+    key_pressed = 'f',
+    held_keys = { 'lshift' },
+
+    action = function(self)
+        if AutoShop.combo_mode then
+            attention_text({
+                text = "Combo Mode off",
+                scale = 1,
+                hold = 3,
+                major = G.jokers or G.play,
+                backdrop_colour = G.C.GREEN
+            })
+            AutoShop.combo_mode = false
+            AutoShop.start_rolls = false
+        else
+            attention_text({
+                text = "Combo Mode on",
+                scale = 1,
+                hold = 3,
+                major = G.jokers or G.play,
+                backdrop_colour = G.C.GREEN
+            })
+            AutoShop.combo_mode = true
+            AutoShop.start_rolls = true
+        end
+    end,
+}
+
+SMODS.Keybind {
+    key = 'toggleKeepSelected',
+    key_pressed = 'f',
+    held_keys = { 'lalt' },
+
+    action = function(self)
+        if AutoShop.keep_selected then
+            attention_text({
+                text = "Will deselect found cards",
+                scale = 1,
+                hold = 3,
+                major = G.jokers or G.play,
+                backdrop_colour = G.C.GREEN
+            })
+            AutoShop.keep_selected = false
+        else
+            attention_text({
+                text = "Will keep found cards selected",
+                scale = 1,
+                hold = 3,
+                major = G.jokers or G.play,
+                backdrop_colour = G.C.GREEN
+            })
+            AutoShop.keep_selected = true
+        end
     end,
 }
