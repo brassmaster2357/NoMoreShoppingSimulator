@@ -1,6 +1,7 @@
 local AutoShop = {
     active = false,
     targets = {},
+	target_count = 0,
     found = false,
     rerolls = 0,
     max_rerolls = 1000,
@@ -29,9 +30,7 @@ create_card = function(...)
 
     -- print(card.config.center.key or "unknown")
 
-
     local key = card.config.center.key
-
 
     if AutoShop.active and AutoShop.targets[key] then
         attention_text({
@@ -98,7 +97,6 @@ local function queue_reroll()
 
             G.FUNCS.reroll_shop()
 
-
             queue_reroll()
 
             return true
@@ -146,22 +144,31 @@ SMODS.Keybind {
             AutoShop.start_rolls = false
         else
             if AutoShop.selection_mode then
-                attention_text({
-                    text = "Stopping selection mode",
-                    scale = 1,
-                    hold = 2,
-                    major = G.jokers or G.play,
-                    backdrop_colour = G.C.GREEN
-                })
-
-
                 AutoShop.selection_mode = false
-                AutoShop.start_rolls = true
+				if AutoShop.target_count == 0 then
+					attention_text({
+						text = "No cards selected",
+						scale = 1,
+						hold = 3,
+						major = G.jokers or G.play,
+						backdrop_colour = G.C.GREEN
+					})
+					AutoShop.start_rolls = false
+				else
+					attention_text({
+						text = string.format("Stopping selection mode, %d total", AutoShop.target_count),
+						scale = 1,
+						hold = 3,
+						major = G.jokers or G.play,
+						backdrop_colour = G.C.GREEN
+					})
+					AutoShop.start_rolls = true
+				end
             else
                 attention_text({
                     text = "Starting selection mode",
                     scale = 1,
-                    hold = 2,
+                    hold = 3,
                     major = G.jokers or G.play,
                     backdrop_colour = G.C.GREEN
                 })
@@ -190,9 +197,12 @@ SMODS.Keybind {
 
         local key = card.config.center.key
 
-
-
-
         AutoShop.targets[key] = not AutoShop.targets[key]
+		
+		if (AutoShop.targets[key]) then
+			AutoShop.target_count = AutoShop.target_count + 1
+		else
+			AutoShop.target_count = AutoShop.target_count - 1
+		end
     end,
 }
