@@ -7,11 +7,10 @@ SMODS.Atlas({
 
 SMODS.Sticker {
     key = "selected",
-    Atlas = "Selected_sticker",
-
-    pos = { x = 1, y = 1},
+    atlas = "Selected_sticker",
+	badge_colour = HEX("FD5F56"),
+    pos = {x = 0, y = 0},
     default_compat = false,
     needs_enable_flag = true,
     hide_badge = false,
-
 }
