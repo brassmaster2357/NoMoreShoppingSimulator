@@ -2,10 +2,11 @@
   "id": "noMoreShoppingSim",
   "name": "No more shopping simulator",
   "author": [
-    "Joshi"
+    "Joshi",
+	"brassmaster2357"
   ],
   "description": "This mod tries to reduce the endless shopping in modded runs with close to infinite cash. Ctrl+F in shop to start selection mode. Spacebar over any item (in game or in collection) to select. Ctrl+F again after selecting items to activate the automatic reroll: the next reroll will keep rerolling the shop until you hit any of the marked items. Rerolling will stop if your money reaches 0, or hold Ctrl+F to stop manually. Shift+F will toggle \"combo mode\", which will keep auto-roll active even if Ctrl+F wasn't used. Alt+F will toggle whether cards are deselected when found.",
   "prefix": "nmSS",
   "main_file": "main.lua",
-  "version": "1.0.1"
+  "version": "1.1"
 }
